@@ -1,0 +1,9 @@
+one:
+  name: image
+  record: one (Product)
+  blob: blob_one
+
+pragprog:
+  name: image
+  record: pragprog (Product)
+  blob: blob_one
