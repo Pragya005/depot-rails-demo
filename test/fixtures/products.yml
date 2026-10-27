@@ -9,3 +9,11 @@ two:
    title: My22String2222
    description: MyText
    price: 9.99
+
+pragprog:
+   title: Pragmatic Programmers
+   description: <p>
+     <em>Ruby on Rails™ 6 for Programmers</em> is the best way to learn Rails.
+     It guides you from the basics of web development all the way to deploying your application in the cloud.
+      </p>
+   price: 49.99

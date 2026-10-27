@@ -1,0 +1,1 @@
+blob_one: <%=ActiveStorage::FixtureSet.blob filename: 'rails.png' %>
