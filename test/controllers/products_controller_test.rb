@@ -17,7 +17,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference("Product.count") do
-      post products_url, params: { product: {  title: 'Brand new title', description: @product.description, price: @product.price, image: fixture_file_upload("rails.png", "image/png")} }
+      post products_url, params: { product: {  title: "Brand new title", description: @product.description, price: @product.price, image: fixture_file_upload("rails.png", "image/png") } }
       puts "STATUS: #{response.status}"
       puts response.body.scan(/<li>(.*?)<\/li>/m).flatten
     end
