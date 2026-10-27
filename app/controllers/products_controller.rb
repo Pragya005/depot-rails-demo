@@ -56,15 +56,13 @@ class ProductsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  # Use callbacks to share common setup or constraints between actions.
+  private def set_product
+    @product = Product.find(params.expect(:id))
+  end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_product
-      @product = Product.find(params.expect(:id))
-    end
-
-    # Only allow a list of trusted parameters through.
-    def product_params
-      params.expect(product: [ :title, :description, :image, :price ])
-    end
+  # Only allow a list of trusted parameters through.
+  private def product_params
+    params.expect(product: [ :title, :description, :image, :price ])
+  end
 end
