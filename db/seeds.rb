@@ -31,7 +31,7 @@ filename: 'img.png')
 product.save!
 # . . .
 
-product = Product.create(title: 'Rails Scales!',
+product = Product.create(title: 'Railsss Scalesss!',
 description:
 %(<p>
 <em>Practical Techniques for Performance and Growth</em>

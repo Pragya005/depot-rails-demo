@@ -8,8 +8,8 @@ class ProductTest < ActiveSupport::TestCase
       product.image.attach(io: File.open("db/images/#{filename}"), filename: filename, content_type: content_type)
     end
   end
-  
-  test 'image url' do
+
+  test "image url" do
     product = new_product("img.png", "image/png")
     assert product.valid?, "image/jpeg must be valid"
 
@@ -31,11 +31,11 @@ class ProductTest < ActiveSupport::TestCase
     product.image.attach(io: File.open("db/images/img.png"), filename: "img.png", content_type: "image/png")
     product.price = -1
     assert product.invalid?
-    assert_equal ["must be greater than 0"], product.errors[:price]
+    assert_equal [ "must be greater than 0" ], product.errors[:price]
 
     product.price = 0
     assert product.invalid?
-    assert_equal ["must be greater than 0"], product.errors[:price]
+    assert_equal [ "must be greater than 0" ], product.errors[:price]
 
     product.price = 1
     assert product.valid?
