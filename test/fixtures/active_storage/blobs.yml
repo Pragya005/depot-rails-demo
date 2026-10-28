@@ -1,1 +1,2 @@
 blob_one: <%=ActiveStorage::FixtureSet.blob filename: 'rails.png' %>
+blob_two: <%=ActiveStorage::FixtureSet.blob filename: 'rails.png' %>
