@@ -8,7 +8,7 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# Product.delete_all
+Product.delete_all
 
 product = Product.create(title: 'Rails Scales!',
 description:
@@ -26,8 +26,8 @@ and maintaining it.
 </p>),
 price: 30.95)
 product.image.attach(io: File.open(
-Rails.root.join('db', 'images', 'img.png')),
-filename: 'img.png')
+Rails.root.join('app', 'assets', 'images', 'lorem.jpg')),
+filename: 'lorem.jpg')
 product.save!
 # . . .
 
@@ -47,7 +47,7 @@ and maintaining it.
 </p>),
 price: 30.95)
 product.image.attach(io: File.open(
-Rails.root.join('db', 'images', 'img.png')),
-filename: 'img.png')
+Rails.root.join('app', 'assets', 'images', 'ruby.jpg')),
+filename: 'ruby.jpg')
 product.save!
 # . . .
