@@ -2,4 +2,4 @@
 import "@hotwired/turbo-rails"
 import "controllers"
 
-// Turbo.config.prefetch.defaultEnabled = false
+import "channels"
