@@ -45,4 +45,12 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to products_url
   end
+
+  test "should not destroy product with line items" do
+    assert_raises(ActiveRecord::RecordNotDestroyed) do
+      delete product_url(products(:two)) # Assuming products(:two) has associated line items
+    end
+
+    assert Product.exists?(products(:two).id), "Product with line items should not be destroyed"
+  end
 end
