@@ -1,0 +1,11 @@
+one:
+  name: Dave Thomas
+  address: 123 Main Street
+  email: dave@example.org
+  pay_type: Check
+
+two:
+  name: David Heinemeier Hansson
+  address: 456 High Street
+  email: MyString
+  pay_type: 1
