@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :users
+  resource :session
+  resources :passwords, param: :token
   resources :line_items
   resources :carts
   root "store#index", as: "store_index"
