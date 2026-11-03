@@ -3,6 +3,7 @@ require "test_helper"
 class OrdersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @order = orders(:one)
+    login_as users(:one)
   end
   test "require item in cart" do
       get new_order_url

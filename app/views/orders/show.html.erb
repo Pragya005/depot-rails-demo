@@ -1,0 +1,52 @@
+<div class="p-6">
+
+  <h1 class="text-4xl font-bold mb-6">
+    Showing order
+  </h1>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Order ID:</strong>
+    <%= @order.id %>
+  </div>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Name:</strong>
+    <%= @order.name %>
+  </div>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Address:</strong>
+    <%= @order.address %>
+  </div>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Email:</strong>
+    <%= @order.email %>
+  </div>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Payment Type:</strong>
+    <%= @order.pay_type %>
+  </div>
+
+  <div class="mb-6">
+    <strong class="block mb-1">Created At:</strong>
+    <%= @order.created_at.strftime("%d-%m-%Y") %>
+  </div>
+
+  <div class="flex flex-wrap gap-3 mt-6">
+
+    <%= link_to "Edit this order", edit_order_path(@order),
+        class: "bg-gray-100 hover:bg-gray-200 text-black font-semibold px-4 py-3 rounded-lg" %>
+
+    <%= link_to "Back to orders", orders_path,
+        class: "bg-gray-100 hover:bg-gray-200 text-black font-semibold px-4 py-3 rounded-lg" %>
+
+    <%= button_to "Destroy this order", @order,
+        method: :delete,
+        class: "bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-3 rounded-lg cursor-pointer",
+        form: { data: { turbo_confirm: "Are you sure?" } } %>
+
+  </div>
+
+</div>
