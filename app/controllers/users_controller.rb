@@ -57,9 +57,11 @@ class UsersController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
+  rescue_from User::Error do |e|
+    redirect_to users_url, notice: e.message
+  end
+
+  private def set_user
       @user = User.find(params.expect(:id))
     end
 

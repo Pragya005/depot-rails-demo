@@ -34,7 +34,7 @@ module Authentication
   end
 
   private def after_authentication_url
-    session.delete(:return_to_after_authenticating) || store_index_url
+    session.delete(:return_to_after_authenticating) || admin_url
   end
 
   private def start_new_session_for(user)
