@@ -1,15 +1,15 @@
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
-    identified_by :current_user
+    identified_by :current_session
 
     def connect
-      set_current_user || reject_unauthorized_connection
+      self.current_session = find_session  # may be nil for anonymous visitors
     end
 
     private
-      def set_current_user
-        if session = Session.find_by(id: cookies.signed[:session_id])
-          self.current_user = session.user
+      def find_session
+        if (session_id = cookies.signed[:session_id])
+          Session.find_by(id: session_id)
         end
       end
   end
