@@ -21,6 +21,6 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_difference("Order.count") do
       post orders_url, params: { order: { address: @order.address, email: @order.email, name: @order.name, pay_type: @order.pay_type } }
     end
-    assert_redirected_to store_index_url
+    assert_redirected_to store_index_url(locale: "en")
   end
 end
