@@ -1,7 +1,9 @@
 class LineItemsController < ApplicationController
   allow_unauthenticated_access only: %i[ create ]
   include CurrentCart
+  include StoreIndexCounter
   before_action :set_cart, only: %i[ create ]
+  before_action :reset_page_view_counter, only: %i[ create ]
   before_action :set_line_item, only: %i[ show edit update destroy ]
 
   # GET /line_items or /line_items.json

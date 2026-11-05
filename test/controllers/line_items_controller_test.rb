@@ -58,4 +58,16 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match /<tr class="line-item-highlight">/, @response.body
   end
+
+  test "adding a line item resets the store page view counter via turbo_stream" do
+    get store_index_url
+    assert_select "#store_counter", "1"
+
+    post line_items_url, params: { product_id: products(:pragprog).id }, as: :turbo_stream
+
+    assert_response :success
+    assert_select 'turbo-stream[action="replace"][target="store_counter"]' do
+      assert_select "span#store_counter", "0"
+    end
+  end
 end

@@ -1,4 +1,6 @@
 class CartsController < ApplicationController
+  include StoreIndexCounter
+  before_action :reset_page_view_counter, only: %i[ update destroy ]
   allow_unauthenticated_access only: %i[ create update destroy ]
   before_action :set_cart, only: %i[ show edit update destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart

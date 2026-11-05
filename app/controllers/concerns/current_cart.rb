@@ -1,9 +1,7 @@
 module CurrentCart
   extend ActiveSupport::Concern
-
-  private
   # we mark the method as private, which prevents Rails from ever making it available as an action on the controller.
-  def set_cart
+  private def set_cart
     @cart = Cart.find(session[:cart_id])
   rescue ActiveRecord::RecordNotFound
     @cart = Cart.create

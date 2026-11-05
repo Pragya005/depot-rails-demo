@@ -6,6 +6,9 @@
 
   <%= turbo_stream_from "products" %>
   <ul>
+    <% if session[:counter] && session[:counter] > 4 %>
+      <p>Page views: <span id = "store_counter"><%= session[:counter] %></span></p>
+    <% end %>
     <% cache @products do %>
       <% @products.each do |product| %>
         <% cache product do %>

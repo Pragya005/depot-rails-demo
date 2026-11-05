@@ -5,3 +5,7 @@
 <%= turbo_stream.replace 'cart' do %>
   <%= render partial: 'layouts/cart', locals: {cart: @cart} %>
 <% end %>
+
+<%= turbo_stream.replace "store_counter" do %>
+  <%= render partial: "store/update_counter" %>
+<% end %>
