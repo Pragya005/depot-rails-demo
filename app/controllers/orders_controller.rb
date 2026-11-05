@@ -46,7 +46,7 @@ class OrdersController < ApplicationController
         session[:cart_id] = nil
         ChargeOrderJob.perform_later(@order, pay_type_params.to_h)
         # @order.charge!(pay_type_params) - we dont do this because payment portal api can make our application slow
-        format.html { redirect_to store_index_url, notice: "Thank you for your order." }
+        format.html { redirect_to store_index_url(locale: I18n.locale), notice: I18n.t(".thanks") }
         format.json { render :show, status: :created, location: @order }
       else
         format.html { render :new, status: :unprocessable_content }
