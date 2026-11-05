@@ -3,7 +3,6 @@ class Product < ApplicationRecord
   after_commit -> { broadcast_refresh_later_to "products" }
   validates :title, :description, :image, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
-  validates :title, uniqueness: true
   validate :acceptable_image
 
   has_many :line_items
