@@ -11,5 +11,8 @@
   <td class="text-right font-bold">
     <%= number_to_currency(line_item.total_price) %>
   </td>
+  <td>
+    <%= button_to "-", line_item_path(line_item), method: :delete, class: "bg-red-600 text-white rounded px-3 py-1" %>
+  </td>
 </tr>
 

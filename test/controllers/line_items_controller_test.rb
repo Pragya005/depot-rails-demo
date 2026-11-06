@@ -60,8 +60,8 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "adding a line item resets the store page view counter via turbo_stream" do
-    get store_index_url
-    assert_select "#store_counter", "1"
+    5.times { get store_index_url }
+    assert_select "#store_counter", "5"
 
     post line_items_url, params: { product_id: products(:pragprog).id }, as: :turbo_stream
 
@@ -69,5 +69,20 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_select 'turbo-stream[action="replace"][target="store_counter"]' do
       assert_select "span#store_counter", "0"
     end
+  end
+
+  test "should add unique line items to the cart" do
+    assert_difference("LineItem.count", 1) do
+      post line_items_url, params: { product_id: products(:pragprog).id }
+    end
+  end
+
+  test "should increment quantity for duplicate line items" do
+    post line_items_url, params: { product_id: products(:two).id }
+    assert_no_difference("LineItem.count") do
+      post line_items_url, params: { product_id: products(:two).id }
+    end
+    cart = Cart.find(session[:cart_id])
+    assert_equal 2, cart.line_items.first.quantity
   end
 end
