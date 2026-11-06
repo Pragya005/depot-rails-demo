@@ -42,6 +42,31 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to line_item_url(@line_item)
   end
 
+  test "should change line_item quantity via turbo_stream" do
+    patch line_item_url(@line_item), params: { amount: 1 }, as: :turbo_stream
+
+    assert_response :success
+    assert_equal 2, @line_item.reload.quantity
+    assert_select 'turbo-stream[action="replace"][target="cart"]'
+  end
+
+  test "decreasing quantity to one does not remove the line_item" do
+    @line_item.update!(quantity: 2)
+
+    patch line_item_url(@line_item), params: { amount: -1 }, as: :turbo_stream
+
+    assert_response :success
+    assert_equal 1, @line_item.reload.quantity
+  end
+
+  test "decreasing quantity below one removes the line_item" do
+    assert_difference("LineItem.count", -1) do
+      patch line_item_url(@line_item), params: { amount: -1 }, as: :turbo_stream
+    end
+
+    assert_response :success
+  end
+
   test "should destroy line_item" do
     assert_difference("LineItem.count", -1) do
       delete line_item_url(@line_item)
