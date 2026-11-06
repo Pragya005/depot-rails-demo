@@ -39,7 +39,7 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update line_item" do
     patch line_item_url(@line_item), params: { line_item: { product_id: @line_item.product_id } }
-    assert_redirected_to line_item_url(@line_item)
+    assert_redirected_to store_index_url
   end
 
   test "should change line_item quantity via turbo_stream" do
@@ -72,7 +72,7 @@ class LineItemsControllerTest < ActionDispatch::IntegrationTest
       delete line_item_url(@line_item)
     end
 
-    assert_redirected_to line_items_url
+    assert_redirected_to store_index_url
   end
 
   test "should create line_item via turbo_stream" do
