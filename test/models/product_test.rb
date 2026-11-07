@@ -50,4 +50,13 @@ class ProductTest < ActiveSupport::TestCase
     assert product.invalid?
     assert_equal [ "has already been taken" ], product.errors[:title]
   end
+
+  test "product title must be at least 10 characters long" do
+    product = Product.new(title: "Short",
+                          description: "yyy",
+                          price: 1)
+    product.image.attach(io: File.open("test/fixtures/files/rails.png"), filename: "img.png", content_type: "image/png")
+    assert product.invalid?
+    assert_equal [ "must be at least 10 characters long" ], product.errors[:title]
+  end
 end

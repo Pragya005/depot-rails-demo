@@ -1,4 +1,6 @@
 class CartsController < ApplicationController
+  include StoreIndexCounter
+  before_action :reset_page_view_counter, only: %i[ update destroy ]
   allow_unauthenticated_access only: %i[ create update destroy ]
   before_action :set_cart, only: %i[ show edit update destroy ]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_cart
@@ -54,6 +56,7 @@ class CartsController < ApplicationController
     session[:cart_id] = nil
 
     respond_to do |format|
+      format.turbo_stream
       format.html { redirect_to store_index_path, notice: "Your cart is currently empty", status: :see_other }
       format.json { head :no_content }
     end

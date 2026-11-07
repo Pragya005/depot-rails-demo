@@ -1,7 +1,9 @@
 class LineItemsController < ApplicationController
   allow_unauthenticated_access only: %i[ create ]
   include CurrentCart
+  include StoreIndexCounter
   before_action :set_cart, only: %i[ create ]
+  before_action :reset_page_view_counter, only: %i[ create ]
   before_action :set_line_item, only: %i[ show edit update destroy ]
 
   # GET /line_items or /line_items.json
@@ -41,12 +43,18 @@ class LineItemsController < ApplicationController
 
   # PATCH/PUT /line_items/1 or /line_items/1.json
   def update
+    @cart = @line_item.cart
+    @line_item.change_quantity(params[:amount].to_i)
+    updated = @line_item.destroyed? || @line_item.save
+
     respond_to do |format|
-      if @line_item.update(line_item_params)
-        format.html { redirect_to @line_item, notice: "Line item was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @line_item }
+      if updated
+        format.turbo_stream
+        format.html { redirect_to store_index_url }
+        format.json { render :show, status: :created, location: @line_item }
       else
-        format.html { render :edit, status: :unprocessable_content }
+        format.turbo_stream { render :update, status: :unprocessable_content }
+        format.html { redirect_to store_index_url }
         format.json { render json: @line_item.errors, status: :unprocessable_content }
       end
     end
@@ -55,9 +63,8 @@ class LineItemsController < ApplicationController
   # DELETE /line_items/1 or /line_items/1.json
   def destroy
     @line_item.destroy!
-
     respond_to do |format|
-      format.html { redirect_to line_items_path, notice: "Line item was successfully destroyed.", status: :see_other }
+      format.html { redirect_to store_index_url, notice: "Line item was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

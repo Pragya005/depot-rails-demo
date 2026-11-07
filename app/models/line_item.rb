@@ -6,4 +6,12 @@ class LineItem < ApplicationRecord
   def total_price
     product.price * quantity
   end
+
+  def change_quantity(amount)
+    if quantity + amount >= 1
+      self.quantity += amount
+    else
+      self.destroy
+    end
+  end
 end

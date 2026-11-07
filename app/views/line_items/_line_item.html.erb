@@ -12,4 +12,7 @@
     <%= number_to_currency(line_item.total_price) %>
   </td>
 </tr>
-
+<tr>
+  <td> <%= button_to "+", line_item_path(id: line_item.id, amount: 1), method: :patch, class: "bg-green-600 text-white rounded px-3 py-1" %> </td>
+  <td> <%= button_to "-", line_item_path(id: line_item.id, amount: -1), method: :patch, class: "bg-red-600 text-white rounded px-3 py-1" %> </td>
+</tr>
