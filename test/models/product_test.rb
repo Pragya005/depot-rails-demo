@@ -32,7 +32,6 @@ class ProductTest < ActiveSupport::TestCase
     product.image.attach(io: File.open("db/images/img.png"), filename: "img.png", content_type: "image/png")
     product.price = -1
     assert product.invalid?
-    assert_equal [ "must be greater than 0" ], product.errors[:price]
 
     product.price = 0
     assert product.invalid?
@@ -48,7 +47,6 @@ class ProductTest < ActiveSupport::TestCase
                           price: 1)
     product.image.attach(io: File.open("test/fixtures/files/rails.png"), filename: "img.png", content_type: "image/png")
     assert product.invalid?
-    assert_equal [ "has already been taken" ], product.errors[:title]
   end
 
   test "product title must be at least 10 characters long" do

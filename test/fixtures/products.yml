@@ -3,11 +3,14 @@
 one:
    title: My New Book lalala
    price: 9.99
+   locale: es
 
 two:
    title: My22String2222
    price: 9.99
+   locale: en
 
 pragprog:
    title: Pragmatic Programmers
    price: 49.99
+   locale: en

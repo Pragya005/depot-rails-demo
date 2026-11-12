@@ -55,4 +55,10 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
     assert Product.exists?(products(:two).id), "Product with line items should not be destroyed"
   end
+
+  test "should generate product links with current locale" do
+    get products_url(locale: :es)
+    assert_response :success
+    assert_select "a[href=?]", product_path(products(:one), locale: :es), count: 1
+  end
 end

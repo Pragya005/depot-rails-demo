@@ -35,4 +35,9 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
       }
     end
   end
+
+  test "should generate order links with current locale" do
+    get orders_url(locale: :es)
+    assert_response :success
+  end
 end
