@@ -1,11 +1,11 @@
 class Product < ApplicationRecord
-  has_rich_text :description
   has_one_attached :image
   after_commit -> { broadcast_refresh_later_to "products" }
   validates :title, :description, :image, presence: true
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
   validate :acceptable_image
+  has_rich_text :description
 
   has_many :line_items
   before_destroy :ensure_not_referenced_by_any_line_item
