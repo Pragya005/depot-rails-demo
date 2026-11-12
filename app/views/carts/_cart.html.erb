@@ -15,6 +15,10 @@
   </table>
   <div class="flex mt-1">
     <%= button_to t('.empty'), cart, method: :delete, confirm: "Are you sure?", class: "ml-4 rounded-lg py-1 px-2 text-white bg-green-600" %>
-    <%= button_to t('.checkout'), new_order_path(locale: params[:locale]), method: :get, class: "ml-4 rounded-lg py-1 px-2 text-black bg-green-600" %>
+    <%= button_to t('.checkout'),
+    new_order_path(locale: params[:locale]),
+    method: :get,
+    class: "ml-4 rounded-lg py-1 px-2 text-black #{controller_name == 'orders' && action_name == 'new' ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600'}",
+    disabled: (controller_name == "orders" && action_name == "new") %>
   </div>
 </div>
