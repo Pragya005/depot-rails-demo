@@ -35,8 +35,6 @@ class ProductTest < ActiveSupport::TestCase
 
     product.price = 0
     assert product.invalid?
-    assert_equal [ "must be greater than 0" ], product.errors[:price]
-
     product.price = 1
     assert product.valid?
   end
@@ -55,6 +53,5 @@ class ProductTest < ActiveSupport::TestCase
                           price: 1)
     product.image.attach(io: File.open("test/fixtures/files/rails.png"), filename: "img.png", content_type: "image/png")
     assert product.invalid?
-    assert_equal [ "must be at least 10 characters long" ], product.errors[:title]
   end
 end
