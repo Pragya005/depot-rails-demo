@@ -9,4 +9,8 @@ class OrderMailerPreview < ActionMailer::Preview
   def shipped
     OrderMailer.shipped
   end
+
+  def ship_date_updated
+    OrderMailer.ship_date_updated
+  end
 end

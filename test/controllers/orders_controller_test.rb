@@ -23,4 +23,16 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
     end
     assert_redirected_to store_index_url(locale: I18n.locale)
   end
+
+  test "should send email when ship date changes" do
+    order = orders(:one)
+
+    assert_enqueued_emails 1 do
+      patch order_url(order), params: {
+        order: {
+          ship_date: Date.new(2026, 11, 20)
+        }
+      }
+    end
+  end
 end

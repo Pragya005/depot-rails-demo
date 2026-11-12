@@ -29,6 +29,13 @@
     <%= @order.pay_type %>
   </div>
 
+  <% if @order.ship_date %>
+    <div class="mb-6">
+      <strong class="block mb-1">Ship Date:</strong>
+      <%= @order.ship_date %>
+    </div>
+  <% end %>
+
   <div class="mb-6">
     <strong class="block mb-1">Created At:</strong>
     <%= @order.created_at.strftime("%d-%m-%Y") %>

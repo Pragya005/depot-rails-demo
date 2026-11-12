@@ -3,6 +3,7 @@ one:
   address: 123 Main Street
   email: pragyajoney2005@gmail.com
   pay_type: Check
+  ship_date: <%= 1.day.ago %>
 
 another_one:
   name: Dave Thomas
