@@ -19,7 +19,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create product" do
     assert_difference("Product.count") do
-      post products_url, params: { product: {  title: "Brand new title", description: @product.description, price: @product.price, image: fixture_file_upload("rails.png", "image/png") } }
+      post products_url, params: { product: {  title: "Brand new title", description: @product.description.to_plain_text, price: @product.price, image: fixture_file_upload("rails.png", "image/png") } }
     end
 
     assert_redirected_to product_url(Product.last)
@@ -36,7 +36,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update product" do
-    patch product_url(@product), params: { product: {  title: @product. title, description: @product.description, price: @product.price, image: fixture_file_upload("rails.png", "image/png") } }
+    patch product_url(@product), params: { product: {  title: @product. title, description: @product.description.to_plain_text, price: @product.price, image: fixture_file_upload("rails.png", "image/png") } }
     assert_redirected_to product_url(@product)
   end
 
@@ -54,5 +54,11 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert Product.exists?(products(:two).id), "Product with line items should not be destroyed"
+  end
+
+  test "should generate product links with current locale" do
+    get products_url(locale: :es)
+    assert_response :success
+    assert_select "a[href=?]", product_path(products(:one), locale: :es), count: 1
   end
 end

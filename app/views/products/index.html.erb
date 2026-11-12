@@ -45,17 +45,17 @@
             <ul>
               <li>
                 <%= link_to 'Show',
-                product,
+                product_path(product, locale: I18n.locale),
                 class: 'hover:underline' %>
               </li>
               <li>
                 <%= link_to 'Edit',
-                edit_product_path(product),
+                edit_product_path(product, locale: I18n.locale),
                 class: 'hover:underline' %>
               </li>
               <li>
                 <%= button_to 'Destroy',
-                product,
+                product_path(product, locale: I18n.locale),
                 method: :delete,
                 class: 'hover:underline',
                 data: { turbo_confirm: "Are you sure?" } %>

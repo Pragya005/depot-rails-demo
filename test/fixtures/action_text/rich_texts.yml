@@ -2,3 +2,22 @@
 #   record: name_of_fixture (ClassOfFixture)
 #   name: content
 #   body: <p>In a <i>million</i> stars!</p>
+
+one:
+  record: one (Product)
+  name: description
+  body: MyText
+
+two:
+  record: two (Product)
+  name: description
+  body: MyText
+
+pragprog:
+  record: pragprog (Product)
+  name: description
+  body: |
+    <p>
+      <em>Ruby on Rails™ 6 for Programmers</em> is the best way to learn Rails.
+      It guides you from the basics of web development all the way to deploying your application in the cloud.
+    </p>

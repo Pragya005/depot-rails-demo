@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
 
   # GET /products or /products.json
   def index
-    @products = Product.all
+    @products = Product.where(locale: I18n.locale.to_s).order(:id)
   end
 
   # GET /products/1 or /products/1.json
@@ -28,6 +28,7 @@ class ProductsController < ApplicationController
         format.html { redirect_to @product, notice: "Product was successfully created." }
         format.json { render :show, status: :created, location: @product }
       else
+        puts @product.errors.full_messages
         format.html { render :new, status: :unprocessable_content }
         format.json { render json: @product.errors, status: :unprocessable_content }
       end
@@ -64,6 +65,6 @@ class ProductsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   private def product_params
-    params.expect(product: [ :title, :description, :image, :price ])
+    params.expect(product: [ :title, :description, :image, :price, :locale ])
   end
 end

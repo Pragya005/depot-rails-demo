@@ -9,6 +9,16 @@
         <h2 class="font-bold"><%= support_request.subject %></h2>
         <%= support_request.body %>
       </blockquote>
+      <% if support_request.orders.any? %>
+        <h3 class="mt-4 text-xl font-bold">All Orders with this email</h3>
+        <ul class="ml-4 list-disc">
+          <% support_request.orders.each do |order| %>
+            <li>
+              <%= link_to "Order ##{order.id} - #{order.created_at.to_formatted_s(:long)}", order_path(order) %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
       <% if support_request.order %>
         <h3 class="mt-4 text-xl font-bold">Recent Order</h3>
         <dl>

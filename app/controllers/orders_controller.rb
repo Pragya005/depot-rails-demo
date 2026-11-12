@@ -7,7 +7,7 @@ class OrdersController < ApplicationController
 
   # GET /orders or /orders.json
   def index
-    @orders = Order.all
+    @orders = Order.order(id: :asc)
   end
 
   # GET /orders/1 or /orders/1.json
@@ -27,6 +27,9 @@ class OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
+        if @order.saved_change_to_ship_date?
+          OrderMailer.ship_date_updated(@order).deliver_later
+        end
         format.html { redirect_to @order, notice: "Order was successfully updated." }
         format.json { render :show, status: :ok, location: @order }
       else
@@ -70,7 +73,7 @@ class OrdersController < ApplicationController
   end
 
   private def order_params
-    params.expect(order: [ :name, :address, :email, :pay_type ])
+    params.expect(order: [ :name, :address, :email, :pay_type, :credit_no, :expiration_date, :routing_number, :account_number, :po, :ship_date ])
   end
 
   private def ensure_cart_isnt_empty

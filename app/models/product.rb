@@ -5,6 +5,7 @@ class Product < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than: 0 }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
   validate :acceptable_image
+  has_rich_text :description
 
   has_many :line_items
   before_destroy :ensure_not_referenced_by_any_line_item
