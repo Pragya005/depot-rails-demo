@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_12_101926) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_092554) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -64,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_101926) do
   create_table "carts", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "line_items_count", default: 0, null: false
   end
 
   create_table "line_items", force: :cascade do |t|
@@ -82,7 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_101926) do
   create_table "orders", force: :cascade do |t|
     t.string "name"
     t.text "address"
-    t.string "email"
+    t.string "email", default: "support@gmail.com"
     t.integer "pay_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -100,6 +101,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_101926) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "locale", default: "en", null: false
+    t.boolean "enabled", default: false
+    t.decimal "discount_price"
+    t.string "permalink"
   end
 
   create_table "sessions", force: :cascade do |t|

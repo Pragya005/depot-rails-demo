@@ -19,4 +19,23 @@
     <strong class="block font-medium mb-1">Locale:</strong>
       <%= product.locale %>
   </div>
+  <% unless product.enabled.nil? %>
+    <div>
+      <strong class="block font-medium mb-1">Enabled</strong>
+        <%= product.enabled %>
+    </div>
+  <% end %>
+
+  <% if product.discount_price %>
+    <div>
+      <strong class="block font-medium mb-1">Discounted Price</strong>
+        <%= product.discount_price %>
+    </div>
+  <% end %>
+  <% if product.permalink %>
+    <div>
+      <strong class="block font-medium mb-1">Permalink</strong>
+        <%= product.permalink %>
+    </div>
+  <% end %>
 </div>
