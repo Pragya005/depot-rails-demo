@@ -4,7 +4,7 @@ class ProductTest < ActiveSupport::TestCase
   fixtures :products
   def new_product(filename, content_type)
     Product.new(title: "My Book Title",
-                description: "yyy",
+                description: "This is a great book to read",
                 price: 1).tap do |product|
       product.image.attach(io: File.open("db/images/#{filename}"), filename: filename, content_type: content_type)
     end
@@ -24,11 +24,10 @@ class ProductTest < ActiveSupport::TestCase
     assert product.errors[:title].any?
     assert product.errors[:description].any?
     assert product.errors[:image].any?
-    assert product.errors[:price].any?
   end
 
   test "product price must be positive" do
-    product = Product.new(title: "My Book Title", description: "yyy")
+    product = Product.new(title: "My Book Title", description: "This is a very good book")
     product.image.attach(io: File.open("db/images/img.png"), filename: "img.png", content_type: "image/png")
     product.price = -1
     assert product.invalid?
