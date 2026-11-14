@@ -8,6 +8,8 @@ class Product < ApplicationRecord
   has_rich_text :description
   validates :permalink, uniqueness: true, format: { with: /\A[A-Za-z0-9]+(?:-[A-Za-z0-9]+){2,}\z/ }, allow_nil: true
   validate :description_word_count
+  after_initialize :set_default_title
+  before_save :set_discount_price
   # price non-custom validator
   # validates :price, comparison: { greater_than: :discount_price, if: -> { price.present? && discount_price.present? } }
 
@@ -21,6 +23,14 @@ class Product < ApplicationRecord
       errors.add(:base, "Line Items present")
       throw :abort
     end
+  end
+
+  private def set_default_title
+    self.title = "abc" unless title.present?
+  end
+
+  private def set_discount_price
+    self.discount_price = price if discount_price.blank?
   end
 
   def acceptable_image
