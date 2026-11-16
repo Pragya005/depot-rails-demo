@@ -6,18 +6,17 @@
 one:
   record: one (Product)
   name: description
-  body: MyText
+  body: A new book in market haha
 
 two:
   record: two (Product)
   name: description
-  body: MyText
+  body: ha ha ha ha ha
 
 pragprog:
   record: pragprog (Product)
   name: description
   body: |
     <p>
-      <em>Ruby on Rails™ 6 for Programmers</em> is the best way to learn Rails.
-      It guides you from the basics of web development all the way to deploying your application in the cloud.
+      <em>Ruby on Rails™ 6 for Programmers</em>
     </p>
