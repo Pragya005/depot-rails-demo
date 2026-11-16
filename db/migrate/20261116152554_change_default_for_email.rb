@@ -1,14 +1,14 @@
 # This is an example of irreversible migration.
 class ChangeDefaultForEmail < ActiveRecord::Migration[8.1]
   def change
-    change_column_default :orders, :email, "support@gmail.com"
+    change_column_default :orders, :email, "example@gmail.com"
   end
 end
 
 # To make this reversible
 # class ChangeDefaultForEmail < ActiveRecord::Migration[8.1]
 #   def change
-#     change_column_default :orders, :email, from: nil, to: "support@gmail.com"
+#     change_column_default :orders, :email, from: nil, to: "example@gmail.com"
 #   end
 # end
 

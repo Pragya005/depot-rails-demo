@@ -1,4 +1,6 @@
 class Product < ApplicationRecord
+  MAX_DESCRIPTION_LENGTH = 10
+  MIN_DESCRIPTION_LENGTH = 5
   has_one_attached :image
   after_commit -> { broadcast_refresh_later_to "products" }
   validates :title, :description, :image, presence: true
@@ -34,7 +36,7 @@ class Product < ApplicationRecord
 
   def description_word_count
     len = description.to_plain_text.split.count
-    if len < 5 || len > 10
+    unless (MIN_DESCRIPTION_LENGTH..MAX_DESCRIPTION_LENGTH).include?(len)
       errors.add(:description, "description length should be < 5 and > 10")
     end
   end
