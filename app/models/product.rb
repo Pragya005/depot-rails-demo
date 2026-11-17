@@ -1,29 +1,31 @@
 class Product < ApplicationRecord
   has_one_attached :image
-  after_commit -> { broadcast_refresh_later_to "products" }
+  has_rich_text :description
+  has_many :line_items, dependent: :restrict_with_exception
+  has_many :carts, through: :line_items
+
   validates :title, :description, :image, presence: true
   validates :price, numericality: { greater_than: 0, if: -> { price.present? } }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
   validate :acceptable_image
-  has_rich_text :description
   validates :permalink, uniqueness: true, format: { with: /\A[A-Za-z0-9]+(?:-[A-Za-z0-9]+){2,}\z/ }, allow_nil: true
   validate :description_word_count
-  after_initialize :set_default_title
-  before_save :set_discount_price
+  validate :discount_price_less_than_price
   # price non-custom validator
   # validates :price, comparison: { greater_than: :discount_price, if: -> { price.present? && discount_price.present? } }
 
+  after_commit -> { broadcast_refresh_later_to "products" }
+  after_initialize :set_default_title
+  before_save :set_discount_price
   # custom validator
-  validate :discount_price_less_than_price
-  has_many :line_items
-  before_destroy :ensure_not_referenced_by_any_line_item
+  # before_destroy :ensure_not_referenced_by_any_line_item
 
-  private def ensure_not_referenced_by_any_line_item
-    unless line_items.empty?
-      errors.add(:base, "Line Items present")
-      throw :abort
-    end
-  end
+  # private def ensure_not_referenced_by_any_line_item
+  #   unless line_items.empty?
+  #     errors.add(:base, "Line Items present")
+  #     throw :abort
+  #   end
+  # end
 
   private def set_default_title
     self.title = "abc" unless title.present?
