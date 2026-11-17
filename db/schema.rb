@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_152554) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_17_104320) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,6 +93,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_152554) do
     t.date "expiration_date"
     t.string "po"
     t.date "ship_date"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -104,6 +106,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_152554) do
     t.boolean "enabled", default: false
     t.decimal "discount_price"
     t.string "permalink"
+    t.index ["enabled"], name: "index_products_on_enabled"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -139,6 +142,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_152554) do
   add_foreign_key "line_items", "carts"
   add_foreign_key "line_items", "orders"
   add_foreign_key "line_items", "products"
+  add_foreign_key "orders", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "support_requests", "orders"
 end

@@ -10,6 +10,13 @@ class UsersController < ApplicationController
   def show
   end
 
+  # GET /users/orders
+  def orders
+    @orders = Current.user.orders.includes(line_items: :products)
+  end
+
+  # GET /users/line_items
+  
   # GET /users/new
   def new
     @user = User.new

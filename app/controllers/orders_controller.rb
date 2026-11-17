@@ -73,7 +73,7 @@ class OrdersController < ApplicationController
   end
 
   private def order_params
-    params.expect(order: [ :name, :address, :email, :pay_type, :credit_no, :expiration_date, :routing_number, :account_number, :po, :ship_date ])
+    params.expect(order: [ :name, :address, :email, :pay_type, :credit_no, :expiration_date, :routing_number, :account_number, :po, :ship_date, :user_id ])
   end
 
   private def ensure_cart_isnt_empty
