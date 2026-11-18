@@ -12,11 +12,13 @@ class UsersController < ApplicationController
 
   # GET /users/orders
   def orders
-    @orders = Current.user.orders.includes(line_items: :products)
+    @orders = resume_session.user.orders.includes(line_items: :product)
   end
 
   # GET /users/line_items
-  
+  def line_items
+    @line_items = resume_session.user.line_items
+  end
   # GET /users/new
   def new
     @user = User.new
