@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   MAX_DESCRIPTION_LENGTH = 10
   MIN_DESCRIPTION_LENGTH = 5
+  DEFAULT_NAME = "abc"
   has_one_attached :image
   after_commit -> { broadcast_refresh_later_to "products" }
   validates :title, :description, :image, presence: true
@@ -10,6 +11,8 @@ class Product < ApplicationRecord
   has_rich_text :description
   validates :permalink, uniqueness: true, format: { with: /\A[A-Za-z0-9]+(?:-[A-Za-z0-9]+){2,}\z/ }, allow_nil: true
   validate :description_word_count
+  after_initialize :set_default_title
+  before_save :set_discount_price
   # price non-custom validator
   # validates :price, comparison: { greater_than: :discount_price, if: -> { price.present? && discount_price.present? } }
 
@@ -23,6 +26,14 @@ class Product < ApplicationRecord
       errors.add(:base, "Line Items present")
       throw :abort
     end
+  end
+
+  private def set_default_title
+    self.title ||= DEFAULT_NAME
+  end
+
+  private def set_discount_price
+    self.discount_price ||= price
   end
 
   def acceptable_image
