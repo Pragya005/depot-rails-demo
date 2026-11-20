@@ -1,6 +1,7 @@
 class Product < ApplicationRecord
   MAX_DESCRIPTION_LENGTH = 10
   MIN_DESCRIPTION_LENGTH = 5
+  DEFAULT_NAME = "abc"
   has_one_attached :image
   after_commit -> { broadcast_refresh_later_to "products" }
   validates :title, :description, :image, presence: true
@@ -28,11 +29,11 @@ class Product < ApplicationRecord
   end
 
   private def set_default_title
-    self.title = "abc" unless title.present?
+    self.title ||= DEFAULT_NAME
   end
 
   private def set_discount_price
-    self.discount_price = price if discount_price.blank?
+    self.discount_price ||= price
   end
 
   def acceptable_image
