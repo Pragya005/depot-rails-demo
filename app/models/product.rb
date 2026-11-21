@@ -21,6 +21,7 @@ class Product < ApplicationRecord
   has_many :line_items, dependent: :restrict_with_exception
   has_many :carts, through: :line_items
   # before_destroy :ensure_not_referenced_by_any_line_item
+  scope :enabled, -> { where(enabled: true) }
 
   # private def ensure_not_referenced_by_any_line_item
   #   unless line_items.empty?
@@ -28,6 +29,17 @@ class Product < ApplicationRecord
   #     throw :abort
   #   end
   # end
+  def self.products_in_atleast_one_line_item
+    joins(:line_items).distinct
+  end
+
+  # def self.title_of_products_in_atleast_one_line_item
+  #   joins(:line_items).distinct.pluck(:title)
+  # end
+
+  def self.title_of_products_in_atleast_one_line_item2
+    where.associated(:line_items).distinct.pluck(:title)
+  end
 
   private def set_default_title
     self.title ||= DEFAULT_NAME
