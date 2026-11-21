@@ -49,7 +49,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should not destroy product with line items" do
-    assert_raises(ActiveRecord::RecordNotDestroyed) do
+    assert_raises(ActiveRecord::DeleteRestrictionError) do
       delete product_url(products(:two)) # Assuming products(:two) has associated line items
     end
 

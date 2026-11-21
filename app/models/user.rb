@@ -8,6 +8,8 @@ class User < ApplicationRecord
   before_update :ensure_not_an_admin, :ensure_cannot_be_admin
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   after_destroy :ensure_an_admin_remains
+  has_many :orders, dependent: :destroy
+  has_many :line_items, through: :orders
   after_create_commit :send_welcome_notification_to_user_mail
 
   class Error < StandardError

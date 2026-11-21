@@ -1,0 +1,24 @@
+<% if @line_items.any? %>
+  <h1>My Line Items</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @line_items.each do |item| %>
+        <tr>
+          <td><%= item.product.title %></td>
+          <td><%= item.quantity %></td>
+          <td><%= number_to_currency(item.product.price) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p> No existing line items!! </p>
+<% end %>
