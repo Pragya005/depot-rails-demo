@@ -9,6 +9,8 @@ class User < ApplicationRecord
   normalizes :email_address, with: ->(e) { e.strip.downcase }
   after_destroy :ensure_an_admin_remains
   after_create_commit :send_welcome_mail
+  has_many :orders, dependent: :destroy
+  has_many :line_items, through: :orders
 
   class Error < StandardError
   end
