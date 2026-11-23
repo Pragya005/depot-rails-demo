@@ -2,26 +2,28 @@ class Product < ApplicationRecord
   MAX_DESCRIPTION_LENGTH = 10
   MIN_DESCRIPTION_LENGTH = 5
   DEFAULT_NAME = "abc"
+
   has_one_attached :image
-  after_commit -> { broadcast_refresh_later_to "products" }
+  has_rich_text :description
+  has_many :line_items, dependent: :restrict_with_exception
+  has_many :carts, through: :line_items
+  belongs_to :category, counter_cache: true
+  scope :enabled, -> { where(enabled: true) }
+
   validates :title, :description, :image, presence: true
   validates :price, numericality: { greater_than: 0, if: -> { price.present? } }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
   validate :acceptable_image
-  has_rich_text :description
   validates :permalink, uniqueness: true, format: { with: /\A[A-Za-z0-9]+(?:-[A-Za-z0-9]+){2,}\z/ }, allow_nil: true
   validate :description_word_count
-  after_initialize :set_default_title
-  before_save :set_discount_price
+  validate :discount_price_less_than_price
   # price non-custom validator
   # validates :price, comparison: { greater_than: :discount_price, if: -> { price.present? && discount_price.present? } }
 
-  # custom validator
-  validate :discount_price_less_than_price
-  has_many :line_items, dependent: :restrict_with_exception
-  has_many :carts, through: :line_items
+  after_initialize :set_default_title
+  before_save :set_discount_price
+  after_commit -> { broadcast_refresh_later_to "products" }
   # before_destroy :ensure_not_referenced_by_any_line_item
-  scope :enabled, -> { where(enabled: true) }
 
   # private def ensure_not_referenced_by_any_line_item
   #   unless line_items.empty?
@@ -29,6 +31,7 @@ class Product < ApplicationRecord
   #     throw :abort
   #   end
   # end
+
   def self.products_in_atleast_one_line_item
     joins(:line_items).distinct
   end
@@ -39,14 +42,6 @@ class Product < ApplicationRecord
 
   def self.title_of_products_in_atleast_one_line_item2
     where.associated(:line_items).distinct.pluck(:title)
-  end
-
-  private def set_default_title
-    self.title ||= DEFAULT_NAME
-  end
-
-  private def set_discount_price
-    self.discount_price ||= price
   end
 
   def acceptable_image
@@ -69,5 +64,13 @@ class Product < ApplicationRecord
     if price.present? && discount_price.present? && price < discount_price
       errors.add(:base, "discount price cannot be more than price")
     end
+  end
+
+  private def set_default_title
+    self.title ||= DEFAULT_NAME
+  end
+
+  private def set_discount_price
+    self.discount_price ||= price
   end
 end
