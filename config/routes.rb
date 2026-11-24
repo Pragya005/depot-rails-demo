@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get "users/orders", to: "users#orders", as: "user_orders"
   get "users/line_items", to: "users#line_items", as: "user_line_items"
   resources :users
+  resources :categories
   scope "(:locale)" do
     resources :products
     resources :line_items
