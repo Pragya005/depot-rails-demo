@@ -1,0 +1,39 @@
+<% if @orders.any? %>
+  <% @orders.each do |order| %>
+    <div class="border rounded-lg p-4 mb-4">
+      <h2 class="text-xl font-bold">
+        Order #<%= order.id %>
+      </h2>
+
+      <p>
+        Total Amount: <%= number_to_currency(order.line_items.sum { |item| item.quantity * item.product.price }) %>
+      </p>
+
+      <h3 class="font-semibold mt-3">Line Items</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% order.line_items.each do |item| %>
+            <tr>
+              <td><%= item.product.title %></td>
+              <td><%= item.quantity %></td>
+              <td><%= number_to_currency(item.product.price) %></td>
+              <td><%= number_to_currency(item.quantity * item.product.price) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+<% else %>
+  <p>You haven't placed any orders yet.</p>
+<% end %>
