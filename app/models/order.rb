@@ -9,6 +9,7 @@ class Order < ApplicationRecord
   has_many :support_requests, dependent: :nullify
   validates :email, email: true
   belongs_to :user, optional: true
+  scope :by_date, ->(from: Date.current, to: Date.current) { where(created_at: from.beginning_of_day..to.end_of_day) }
 
   def add_line_items_from_cart(cart)
     cart.line_items.each do |item|
