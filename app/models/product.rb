@@ -10,7 +10,7 @@ class Product < ApplicationRecord
   belongs_to :category, counter_cache: true
   scope :enabled, -> { where(enabled: true) }
 
-  validates :title, :description, :image, presence: true
+  validates :title, :description, :image, :category_id, presence: true
   validates :price, numericality: { greater_than: 0, if: -> { price.present? } }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
   validate :acceptable_image
@@ -23,6 +23,9 @@ class Product < ApplicationRecord
   after_initialize :set_default_title
   before_save :set_discount_price
   after_commit -> { broadcast_refresh_later_to "products" }
+  after_create_commit :increment_parent_products_count_in_category
+  after_destroy_commit :decrement_parent_products_count_in_category
+  after_update_commit :update_parent_products_count_in_category, if: :saved_change_to_category_id?
   # before_destroy :ensure_not_referenced_by_any_line_item
 
   # private def ensure_not_referenced_by_any_line_item
@@ -72,5 +75,19 @@ class Product < ApplicationRecord
 
   private def set_discount_price
     self.discount_price ||= price
+  end
+
+  private def increment_parent_products_count_in_category
+    category.adjust_parent_products_count(1)
+  end
+
+  private def decrement_parent_products_count_in_category
+    category.adjust_parent_products_count(-1)
+  end
+
+  private def update_parent_products_count_in_category
+    old_category_id, new_category_id = saved_change_to_category_id
+    Category.find(old_category_id).adjust_parent_products_count(-1)
+    Category.find(new_category_id).adjust_parent_products_count(1)
   end
 end
