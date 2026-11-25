@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_17_104320) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_23_075323) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_104320) do
     t.integer "saman_counter", default: 0, null: false
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "products_count", default: 0
+    t.index ["name", "parent_id"], name: "unique_sub_category_name_for_category", unique: true, where: "(parent_id IS NOT NULL)"
+    t.index ["name"], name: "unique_root_category_names", unique: true, where: "(parent_id IS NULL)"
+    t.index ["parent_id"], name: "index_categories_on_parent_id"
+  end
+
   create_table "line_items", force: :cascade do |t|
     t.bigint "product_id", null: false
     t.bigint "cart_id"
@@ -106,11 +117,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_104320) do
     t.boolean "enabled", default: false
     t.decimal "discount_price"
     t.string "permalink"
+    t.bigint "category_id", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
     t.index ["enabled"], name: "index_products_on_enabled"
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "user_id"
     t.string "ip_address"
     t.string "user_agent"
     t.datetime "created_at", null: false
@@ -139,10 +152,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_17_104320) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "categories", "categories", column: "parent_id"
   add_foreign_key "line_items", "carts"
   add_foreign_key "line_items", "orders"
   add_foreign_key "line_items", "products"
   add_foreign_key "orders", "users"
+  add_foreign_key "products", "categories"
   add_foreign_key "sessions", "users"
   add_foreign_key "support_requests", "orders"
 end
