@@ -3,20 +3,21 @@ class Product < ApplicationRecord
   MIN_DESCRIPTION_LENGTH = 5
   DEFAULT_NAME = "abc"
 
-  has_one_attached :image
+  has_many_attached :images
   has_rich_text :description
   has_many :line_items, dependent: :restrict_with_exception
   has_many :carts, through: :line_items
   belongs_to :category, counter_cache: true
   scope :enabled, -> { where(enabled: true) }
 
-  validates :title, :description, :image, :category_id, presence: true
+  validates :title, :description, :images, :category_id, presence: true
   validates :price, numericality: { greater_than: 0, if: -> { price.present? } }
   validates :title, uniqueness: true, length: { minimum: 10, message: "must be at least 10 characters long" }
-  validate :acceptable_image
+  validate :acceptable_images
   validates :permalink, uniqueness: true, format: { with: /\A[A-Za-z0-9]+(?:-[A-Za-z0-9]+){2,}\z/ }, allow_nil: true
   validate :description_word_count
   validate :discount_price_less_than_price
+  validate :ensure_maximum_3_images
   # price non-custom validator
   # validates :price, comparison: { greater_than: :discount_price, if: -> { price.present? && discount_price.present? } }
 
@@ -47,12 +48,15 @@ class Product < ApplicationRecord
     where.associated(:line_items).distinct.pluck(:title)
   end
 
-  def acceptable_image
-    return unless image.attached?
+  def acceptable_images
+    return unless images.attached?
 
     acceptable_types = [ "image/jpeg", "image/png", "image/gif" ]
-    unless acceptable_types.include?(image.content_type)
-      errors.add(:image, "must be a JPEG, PNG, or GIF")
+    images.each do |image|
+      unless acceptable_types.include?(image.content_type)
+        errors.add(:image, "must be a JPEG, PNG, or GIF")
+        break
+      end
     end
   end
 
@@ -66,6 +70,12 @@ class Product < ApplicationRecord
   def discount_price_less_than_price
     if price.present? && discount_price.present? && price < discount_price
       errors.add(:base, "discount price cannot be more than price")
+    end
+  end
+
+  def ensure_maximum_3_images
+    if images.length > 3
+      errors.add(:images, "Cannot attach more than 3 images")
     end
   end
 

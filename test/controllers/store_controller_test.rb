@@ -3,6 +3,15 @@ require "test_helper"
 class StoreControllerTest < ActionDispatch::IntegrationTest
   def setup
     login_as users(:one)
+     Product.find_each do |product|
+      File.open(Rails.root.join("test/fixtures/files/rails.png")) do |image|
+        product.images.attach(
+          io: image,
+          filename: "rails.png",
+          content_type: "image/png"
+        )
+      end
+    end
   end
   test "should get index" do
     get store_index_url
