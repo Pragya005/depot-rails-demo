@@ -7,6 +7,27 @@
     <strong class="block font-medium mb-1">Description:</strong>
     <%= product.description %>
   </div>
+
+  <div data-controller="image-slider">
+    <div class="slide-container">
+      <% @product.images.each_with_index do |image, index| %>
+        <div data-image-slider-target="slide" class="<%= index == 0 ? '' : 'hidden' %>">
+          <%= image_tag image, class: "w-full h-96 object-contain" %>
+        </div>
+      <% end %>
+    </div>
+    <% if @product.images.size > 1 %>
+      <button class="absolute left-3 top-1/2 -translate-y-1/2 z-10"
+      data-action="click->image-slider#previous"> <%# event->controller#method %>
+        Previous
+      </button>
+      <button class="absolue right-3 top-1/2 -translate-y-1/2 z-10"
+      data-action="click->image-slider#next">
+        Next
+      </button>
+    <% end %>
+  </div>
+
   <div>
     <strong class="block font-medium mb-1">Image:</strong>
     <%= link_to product.images.first.filename, product.images.first, class: "text-gray-700 underline hover:no-underline" if product.images.attached? %>
