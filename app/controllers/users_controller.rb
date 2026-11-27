@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    @users = User.order(:name)
+    @users = User.order(:name).includes(:address)
   end
 
   # GET /users/1 or /users/1.json
@@ -13,15 +13,18 @@ class UsersController < ApplicationController
   # GET /users/orders
   def orders
     @orders = resume_session&.user&.orders&.includes(line_items: :product)
+    render "users/orders", layout: "myorders"
   end
 
   # GET /users/line_items
   def line_items
     @line_items = resume_session&.user&.line_items
+    render "users/line_items", layout: "myorders"
   end
   # GET /users/new
   def new
     @user = User.new
+    @user.build_address
   end
 
   # GET /users/1/edit
@@ -31,7 +34,6 @@ class UsersController < ApplicationController
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         format.html { redirect_to users_url, notice: "User #{@user.name} was successfully created." }
@@ -71,11 +73,11 @@ class UsersController < ApplicationController
   end
 
   private def set_user
-      @user = User.find(params.expect(:id))
-    end
+    @user = User.find(params.expect(:id))
+  end
 
-    # Only allow a list of trusted parameters through.
-    def user_params
-      params.expect(user: [ :name, :email_address, :password, :password_confirmation ])
-    end
+  # Only allow a list of trusted parameters through.
+  private def user_params
+    params.expect(user: [ :name, :email_address, :password, :password_confirmation, address_attributes: [ :city, :state, :country, :pincode ] ])
+  end
 end

@@ -4,6 +4,14 @@ class ProductsController < ApplicationController
   # GET /products or /products.json
   def index
     @products = Product.where(locale: I18n.locale.to_s).order(:id)
+    respond_to do |format|
+      format.html
+      format.json { render json: @products.map { |product|
+      {
+        name: product.title,
+        category_name: product.category&.name
+      }}}
+    end
   end
 
   # GET /products/1 or /products/1.json
@@ -65,6 +73,6 @@ class ProductsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   private def product_params
-    params.expect(product: [ :title, :description, :image, :price, :locale, :enabled, :discount_price, :permalink, :category_id ])
+    params.expect(product: [ :title, :description, :price, :locale, :enabled, :discount_price, :permalink, :category_id, images: [] ])
   end
 end

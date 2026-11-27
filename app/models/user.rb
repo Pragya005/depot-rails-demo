@@ -11,6 +11,8 @@ class User < ApplicationRecord
   after_create_commit :send_welcome_mail
   has_many :orders, dependent: :destroy
   has_many :line_items, through: :orders
+  has_one :address, dependent: :destroy
+  accepts_nested_attributes_for :address
 
   class Error < StandardError
   end

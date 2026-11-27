@@ -2,7 +2,7 @@
   <li class="flex mb-6">
     <%= button_to line_items_path(product_id: product), method: :post, class: "cursor-pointer object-contain w-40 h-48 shadow mr-6" do %>
       <%= image_tag(
-        product.image
+        product.images.first
         ) %>
     <% end %>
     <div>

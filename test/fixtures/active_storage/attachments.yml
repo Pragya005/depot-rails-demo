@@ -1,14 +1,14 @@
 one:
-  name: image
+  name: images
   record: one (Product)
   blob: blob_one
 
 two:
-  name: image
+  name: images
   record: two (Product)
   blob: blob_two
 
 pragprog:
-  name: image
+  name: images
   record: pragprog (Product)
   blob: blob_one
