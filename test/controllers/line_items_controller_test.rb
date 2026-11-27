@@ -2,13 +2,6 @@ require "test_helper"
 
 class LineItemsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    Product.all.each do |product|
-      product.images.attach(
-        io: File.open(Rails.root.join("test/fixtures/files/rails.png")),
-        filename: "rails.png",
-        content_type: "image/png"
-      )
-    end
     @line_item = line_items(:one)
     login_as users(:one)
   end

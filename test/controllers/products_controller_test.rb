@@ -36,7 +36,7 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update product" do
-    patch product_url(@product), params: { product: {  title: @product. title, description: @product.description.to_plain_text, price: @product.price, images: [ fixture_file_upload("rails.png", "image/png") ]} }
+    patch product_url(@product), params: { product: {  title: @product. title, description: @product.description.to_plain_text, price: @product.price, images: [ fixture_file_upload("rails.png", "image/png") ] } }
     assert_redirected_to product_url(@product)
   end
 
